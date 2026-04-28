@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News30 — Know the World in 30 Seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================
+   RESET & ROOT
+============================ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f5f4f0;
+  --white:#ffffff;
+  --black:#0a0a0a;
+  --border:#e2e0d8;
+  --border2:#d4d2ca;
+  --text:#0a0a0a;
+  --text2:#3a3a3a;
+  --muted:#888880;
+  --light:#edece8;
+  --card:#ffffff;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --shadow2:0 2px 8px rgba(0,0,0,.1),0 8px 32px rgba(0,0,0,.08);
+  --geo:#1a56db;
+  --geo-light:#e8f0fe;
+  --fin:#15803d;
+  --fin-light:#dcfce7;
+  --sport:#c2410c;
+  --sport-light:#fff7ed;
+  --red:#dc2626;
+  --accent:#0a0a0a;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+button{font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:none}
+input{font-family:'DM Sans',sans-serif}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ============================
+   SCREENS
+============================ */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ============================
+   TOPBAR — breaking news ticker
+============================ */
+.topbar{
+  background:var(--black);
+  color:#fff;
+  padding:8px 0;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.ticker-wrap{display:flex;align-items:center;gap:0;overflow:hidden}
+.ticker-label{
+  background:#dc2626;
+  color:#fff;
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:1.5px;
+  padding:4px 12px;
+  white-space:nowrap;
+  flex-shrink:0;
+  text-transform:uppercase;
+  margin-right:16px;
+}
+.ticker-track{
+  display:flex;
+  gap:48px;
+  animation:ticker 30s linear infinite;
+  white-space:nowrap;
+}
+.ticker-track span{font-size:12px;font-weight:400;opacity:.85}
+.ticker-track span::before{content:"·";margin-right:48px;opacity:.4}
+.ticker-track span:first-child::before{display:none}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============================
+   NAVBAR
+============================ */
+.nav{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  height:60px;
+  display:flex;
+  align-items:center;
+  padding:0 24px;
+  gap:16px;
+  flex-shrink:0;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 1px 0 var(--border);
+}
+
+/* LOGO */
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.logo-globe{width:34px;height:34px;flex-shrink:0}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.5px;color:var(--black)}
+
+/* SEARCH */
+.nav-search{
+  flex:1;
+  max-width:480px;
+  display:flex;
+  align-items:center;
+  background:var(--bg);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:0 14px;
+  height:38px;
+  gap:8px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.nav-search:focus-within{border-color:var(--black);box-shadow:0 0 0 3px rgba(10,10,10,.06)}
+.nav-search input{flex:1;border:none;background:transparent;font-size:13px;color:var(--text);outline:none}
+.nav-search input::placeholder{color:var(--muted)}
+.nav-search-icon{color:var(--muted);font-size:14px;flex-shrink:0}
+.ai-chip{
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  font-weight:500;
+  letter-spacing:.5px;
+  background:var(--black);
+  color:#fff;
+  border-radius:4px;
+  padding:2px 7px;
+  flex-shrink:0;
+  text-transform:uppercase;
+}
+
+/* NAV ACTIONS */
+.nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+.nav-btn{
+  width:36px;height:36px;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);
+  font-size:17px;
+  transition:all .15s;
+  cursor:pointer;
+}
+.nav-btn:hover{background:var(--light);color:var(--text)}
+.ham-btn{font-size:18px}
+.nav-avatar{
+  width:34px;height:34px;
+  border-radius:50%;
+  background:var(--black);
+  color:#fff;
+  font-family:'Syne',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:opacity .15s;
+}
+.nav-avatar:hover{opacity:.85}
+
+/* ============================
+   HOME LAYOUT
+============================ */
+#home .body{display:flex;flex:1;overflow:hidden;height:calc(100vh - 60px - 33px)}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  flex-shrink:0;
+  background:var(--white);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  padding:8px 0 24px;
+}
+.sb-group-label{
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:16px 20px 6px;
+}
+.sb-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:9px 16px;
+  margin:1px 8px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .15s;
+  font-size:13px;
+  font-weight:500;
+  color:var(--text2);
+}
+.sb-item:hover{background:var(--light)}
+.sb-item.active{background:var(--black);color:#fff}
+.sb-item.active .sb-icon{filter:invert(1)}
+.sb-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.sb-divider{height:1px;background:var(--border);margin:8px 16px}
+
+/* FEED */
+.feed-col{flex:1;overflow-y:auto;background:var(--bg)}
+
+/* CAT TABS */
+.cat-strip{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  gap:2px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.cat-strip::-webkit-scrollbar{display:none}
+.ctab{
+  padding:14px 16px;
+  font-size:13px;
+  font-weight:500;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  white-space:nowrap;
+  transition:all .15s;
+  background:none;
+}
+.ctab:hover{color:var(--text)}
+.ctab.active{color:var(--text);border-bottom-color:var(--black);font-weight:600}
+.ctab-lock{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 12px;
+  border-radius:6px;
+  background:var(--light);
+  border:1px solid var(--border);
+  font-size:11px;
+  font-weight:600;
+  color:var(--muted);
+  cursor:not-allowed;
+  white-space:nowrap;
+  margin-left:4px;
+}
+.pro-tag{
+  background:var(--black);
+  color:#fff;
+  font-family:'DM Mono',monospace;
+  font-size:7px;
+  font-weight:500;
+  letter-spacing:.5px;
+  padding:1px 5px;
+  border-radius:3px;
+  text-transform:uppercase;
+}
+
+/* FEED INNER */
+.feed-inner{padding:24px}
+
+/* SECTION */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-title{
+  font-family:'Syne',sans-serif;
+  font-weight:700;
+  font-size:17px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.sec-bar{width:3px;height:18px;border-radius:2px}
+.sec-see{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  color:var(--muted);
+  cursor:pointer;
+  letter-spacing:.5px;
+  transition:color .15s;
+}
+.sec-see:hover{color:var(--text)}
+
+/* VIDEO GRID */
+.vgrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:32px;
+}
+
+/* VIDEO CARD */
+.vcard{
+  background:var(--card);
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+.vcard:active{transform:scale(.98)}
+
+/* THUMB */
+.vthumb{
+  aspect-ratio:16/9;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.vt-geo{background:linear-gradient(135deg,#dbeafe,#bfdbfe)}
+.vt-fin{background:linear-gradient(135deg,#dcfce7,#bbf7d0)}
+.vt-sport{background:linear-gradient(135deg,#ffedd5,#fed7aa)}
+.vt-inner{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:4px;width:100%;height:100%;
+}
+.vt-ai{
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  font-weight:500;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  opacity:.5;
+}
+.vt-num{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:32px;
+  opacity:.2;
+  line-height:1;
+}
+.vt-play{
+  position:absolute;
+  bottom:8px;right:8px;
+  width:28px;height:28px;
+  background:rgba(0,0,0,.75);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;
+  font-size:10px;
+}
+.vt-dur{
+  position:absolute;
+  bottom:8px;left:8px;
+  background:rgba(0,0,0,.75);
+  color:#fff;
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  font-weight:500;
+  padding:2px 6px;
+  border-radius:3px;
+}
+
+/* CARD BODY */
+.vcard-body{padding:11px 12px 12px}
+.vcard-tags{display:flex;align-items:center;gap:4px;margin-bottom:6px;flex-wrap:wrap}
+.tag{
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  font-weight:500;
+  padding:2px 7px;
+  border-radius:4px;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.tag-geo{background:var(--geo-light);color:var(--geo)}
+.tag-fin{background:var(--fin-light);color:var(--fin)}
+.tag-sport{background:var(--sport-light);color:var(--sport)}
+.tag-c{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.tag-l{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.tag-r{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.tag-v{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.tag-d{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.vcard-title{
+  font-size:12px;
+  font-weight:600;
+  line-height:1.45;
+  color:var(--text);
+  margin-bottom:8px;
+}
+.vcard-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.vcard-src{font-size:11px;color:var(--muted);font-weight:500}
+.vcard-src a{color:var(--geo);font-size:10px;font-family:'DM Mono',monospace;margin-left:4px}
+.vcard-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.quiz-btn{
+  display:inline-flex;align-items:center;gap:3px;
+  background:var(--black);
+  color:#fff;
+  border-radius:5px;
+  padding:3px 8px;
+  font-size:9px;
+  font-weight:600;
+  font-family:'DM Mono',monospace;
+  margin-top:7px;
+  letter-spacing:.3px;
+  cursor:pointer;
+  transition:opacity .15s;
+}
+.quiz-btn:hover{opacity:.8}
+
+/* ============================
+   VIDEO SCREEN
+============================ */
+#vidscreen{background:#000;min-height:100vh}
+.vid-nav{
+  height:56px;
+  background:rgba(0,0,0,.9);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;
+  padding:0 20px;gap:14px;
+  flex-shrink:0;
+  position:sticky;top:0;z-index:50;
+}
+.vid-back{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;
+  cursor:pointer;
+  transition:background .15s;
+  flex-shrink:0;
+}
+.vid-back:hover{background:rgba(255,255,255,.18)}
+.vid-logo{
+  display:flex;align-items:center;gap:8px;
+}
+.vid-logo-text{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:19px;
+  color:#fff;
+  letter-spacing:-.3px;
+}
+.vid-body{display:flex;flex:1;min-height:calc(100vh - 56px - 52px)}
+
+/* PLAYER */
+.vid-player{
+  flex:1;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  min-height:400px;
+}
+.vid-geo-bg{background:radial-gradient(ellipse at 40% 30%,#0f2a5e 0%,#000 65%)}
+.vid-fin-bg{background:radial-gradient(ellipse at 40% 30%,#052e16 0%,#000 65%)}
+.vid-sport-bg{background:radial-gradient(ellipse at 40% 30%,#431407 0%,#000 65%)}
+.vid-emoji{font-size:90px;opacity:.07;position:absolute;top:25%;transform:translateY(-50%)}
+.vid-cat-tag{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+  position:relative;z-index:1;
+  margin-bottom:12px;
+}
+.vid-hl{
+  font-family:'Syne',sans-serif;
+  font-weight:700;
+  font-size:26px;
+  text-align:center;
+  padding:0 80px;
+  line-height:1.2;
+  color:#fff;
+  position:relative;z-index:1;
+  text-shadow:0 2px 24px rgba(0,0,0,.8);
+  margin-bottom:14px;
+}
+.vid-src-pill{
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;
+  padding:6px 16px;
+  font-size:11px;
+  color:rgba(255,255,255,.6);
+  position:relative;z-index:1;
+  cursor:pointer;
+  transition:background .15s;
+}
+.vid-src-pill:hover{background:rgba(255,255,255,.18)}
+.vid-progress{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:0 24px 18px;
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
+}
+.prog-track{
+  height:3px;
+  background:rgba(255,255,255,.2);
+  border-radius:2px;
+  overflow:hidden;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+.prog-fill{
+  height:100%;
+  background:#fff;
+  border-radius:2px;
+  width:35%;
+  animation:proggo 28s linear infinite;
+}
+@keyframes proggo{from{width:0}to{width:100%}}
+.vid-ctrls{display:flex;align-items:center;gap:16px}
+.vctrl{color:rgba(255,255,255,.65);font-size:20px;cursor:pointer;transition:color .15s}
+.vctrl:hover{color:#fff}
+.vctrl-time{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);margin-left:auto}
+
+/* VIDEO SIDE ACTIONS */
+.vid-side{
+  width:68px;
+  background:rgba(0,0,0,.5);
+  border-left:1px solid rgba(255,255,255,.06);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:22px;
+  padding:20px 0;
+  flex-shrink:0;
+}
+.va{
+  display:flex;flex-direction:column;
+  align-items:center;gap:5px;
+  cursor:pointer;
+  transition:transform .15s;
+}
+.va:hover{transform:scale(1.1)}
+.va:active{transform:scale(.9)}
+.va-icon{
+  width:46px;height:46px;
+  border-radius:50%;
+  background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  transition:background .15s;
+}
+.va:hover .va-icon{background:rgba(255,255,255,.18)}
+.va.liked .va-icon{background:rgba(220,38,38,.3)}
+.va-lbl{
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  color:rgba(255,255,255,.45);
+  letter-spacing:.3px;
+  text-align:center;
+}
+
+/* VIDEO BOTTOM TABS */
+.vid-btabs{
+  display:flex;
+  background:rgba(5,5,5,.98);
+  border-top:1px solid rgba(255,255,255,.08);
+  flex-shrink:0;
+  height:52px;
+}
+.vbtab{
+  flex:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:3px;
+  cursor:pointer;
+  border-top:2px solid transparent;
+  transition:all .15s;
+}
+.vbtab.active{border-top-color:#fff}
+.vbtab-icon{font-size:17px}
+.vbtab-lbl{
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  color:rgba(255,255,255,.4);
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.vbtab.active .vbtab-lbl{color:#fff}
+
+/* ============================
+   INTERACTIVE SCREEN
+============================ */
+#interscreen{background:var(--white)}
+.inter-nav{
+  height:56px;
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 16px;gap:12px;
+  flex-shrink:0;
+  position:sticky;top:0;z-index:50;
+}
+.inter-thumb{
+  width:48px;height:48px;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+}
+.inter-info{flex:1;min-width:0}
+.inter-title{
+  font-size:13px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.inter-meta{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--muted);margin-top:2px;
+}
+.close-x{
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--light);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--muted);font-size:14px;
+  transition:all .15s;flex-shrink:0;
+}
+.close-x:hover{background:var(--border2);color:var(--text)}
+
+/* INTER TABS */
+.itabs{
+  display:flex;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  background:var(--white);
+}
+.itab{
+  flex:1;padding:13px 8px;
+  text-align:center;
+  font-size:12px;font-weight:600;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.itab.active{color:var(--text);border-bottom-color:var(--black)}
+
+/* PANELS */
+.panel{display:none;flex:1;overflow-y:auto;flex-direction:column}
+.panel.active{display:flex}
+
+/* SUMMARY */
+.sum-body{padding:20px;gap:14px;display:flex;flex-direction:column}
+.sum-hl{
+  font-family:'Syne',sans-serif;
+  font-weight:700;font-size:22px;line-height:1.2;
+}
+.sum-tags{display:flex;gap:6px;flex-wrap:wrap}
+.sum-text{font-size:14px;line-height:1.8;color:var(--text2)}
+.kp-box{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  display:flex;flex-direction:column;gap:9px;
+}
+.kp-hdr{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--geo);margin-bottom:4px;
+}
+.kp{display:flex;gap:10px;font-size:13px;line-height:1.5;align-items:flex-start}
+.kp-dot{width:5px;height:5px;border-radius:50%;background:var(--geo);margin-top:7px;flex-shrink:0}
+.src-row{display:flex;gap:8px;flex-wrap:wrap}
+.src-card{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px;
+  display:flex;align-items:center;gap:8px;
+  cursor:pointer;
+  transition:border-color .15s;
+}
+.src-card:hover{border-color:var(--geo)}
+.src-ico{
+  width:24px;height:24px;border-radius:4px;
+  background:var(--light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+}
+.src-name{font-size:12px;font-weight:600}
+.src-bias{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
+.sec-lbl{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* AI CHAT */
+.ai-body{display:flex;flex-direction:column;flex:1}
+.ai-msgs{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;min-height:200px}
+.msg{display:flex;gap:10px}
+.msg-user{flex-direction:row-reverse}
+.msg-av{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  flex-shrink:0;margin-top:2px;
+}
+.msg-ai .msg-av{background:var(--black);color:#fff}
+.msg-user .msg-av{background:var(--light);color:var(--text)}
+.bubble{
+  max-width:80%;padding:10px 14px;border-radius:12px;
+  font-size:13px;line-height:1.65;
+}
+.msg-ai .bubble{background:var(--bg);border:1px solid var(--border);border-top-left-radius:3px}
+.msg-user .bubble{background:var(--black);color:#fff;border-top-right-radius:3px}
+.typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.tdot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:td 1.2s infinite}
+.tdot:nth-child(2){animation-delay:.2s}
+.tdot:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+.qq-row{padding:0 16px 10px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.qq-row::-webkit-scrollbar{display:none}
+.qq{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;padding:7px 14px;
+  font-size:12px;color:var(--text2);
+  white-space:nowrap;cursor:pointer;
+  transition:all .15s;flex-shrink:0;
+}
+.qq:hover{border-color:var(--black);color:var(--text)}
+.ai-inp-row{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;gap:10px;align-items:center;
+  background:var(--white);
+}
+.ai-inp{
+  flex:1;background:var(--bg);border:1.5px solid var(--border);
+  border-radius:20px;padding:10px 16px;
+  color:var(--text);font-size:13px;
+  outline:none;transition:border-color .15s;
+}
+.ai-inp:focus{border-color:var(--black);background:var(--white)}
+.ai-inp::placeholder{color:var(--muted)}
+.send-btn{
+  width:38px;height:38px;background:var(--black);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:#fff;font-size:16px;
+  flex-shrink:0;transition:opacity .15s;
+}
+.send-btn:hover{opacity:.8}
+.send-btn:active{transform:scale(.92)}
+
+/* QUIZ */
+.quiz-body{padding:20px;gap:16px;display:flex;flex-direction:column}
+.quiz-hdr{text-align:center}
+.quiz-ttl{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.5px;margin-bottom:4px}
+.quiz-sub{font-size:13px;color:var(--muted)}
+.q-prog{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.qd{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
+.qd.done{background:var(--fin)}
+.qd.cur{background:var(--black);opacity:.6}
+.pts-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--black);color:#fff;
+  border-radius:20px;padding:6px 16px;
+  font-family:'DM Mono',monospace;font-size:11px;
+  margin:0 auto;width:fit-content;
+}
+.q-card{
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:12px;padding:18px;
+}
+.q-num{
+  font-family:'DM Mono',monospace;font-size:9px;
+  font-weight:500;letter-spacing:1.5px;
+  color:var(--geo);text-transform:uppercase;margin-bottom:8px;
+}
+.q-text{font-family:'Syne',sans-serif;font-weight:600;font-size:16px;line-height:1.4}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:10px;padding:13px 15px;font-size:14px;
+  cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:12px;color:var(--text);
+}
+.opt:hover{border-color:var(--black);background:var(--bg)}
+.opt.correct{border-color:var(--fin);background:#f0fdf4;color:var(--fin)}
+.opt.wrong{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.opt-ltr{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--light);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;
+  flex-shrink:0;transition:all .15s;
+}
+.opt.correct .opt-ltr{background:var(--fin);border-color:var(--fin);color:#fff}
+.opt.wrong .opt-ltr{background:var(--red);border-color:var(--red);color:#fff}
+.score-card{
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:12px;padding:28px;text-align:center;
+  display:none;flex-direction:column;gap:12px;align-items:center;
+}
+.score-big{font-family:'Syne',sans-serif;font-weight:800;font-size:64px;color:var(--black);line-height:1}
+.score-sub{font-size:13px;color:var(--muted)}
+.score-pts{
+  font-family:'DM Mono',monospace;font-size:12px;
+  color:var(--fin);background:#f0fdf4;
+  border:1px solid #bbf7d0;padding:8px 20px;border-radius:20px;
+}
+.retry-btn{
+  background:var(--black);color:#fff;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
+  padding:12px 28px;border-radius:8px;
+  cursor:pointer;transition:opacity .15s;margin-top:4px;
+}
+.retry-btn:hover{opacity:.85}
+
+/* ============================
+   HAMBURGER PANEL
+============================ */
+#ham-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.4);
+  z-index:190;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+}
+#ham-overlay.open{opacity:1;pointer-events:all}
+#ham-panel{
+  position:fixed;left:-320px;top:0;
+  width:320px;height:100vh;
+  background:var(--white);
+  z-index:200;
+  transition:left .28s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  border-right:1px solid var(--border);
+  box-shadow:4px 0 24px rgba(0,0,0,.1);
+}
+#ham-panel.open{left:0}
+.ham-hdr{
+  height:60px;
+  display:flex;align-items:center;
+  padding:0 20px;gap:12px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  position:sticky;top:0;
+  background:var(--white);z-index:5;
+}
+.ham-logo{display:flex;align-items:center;gap:8px}
+.ham-logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.3px}
+.ham-close{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--light);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--muted);font-size:14px;
+  margin-left:auto;transition:all .15s;
+}
+.ham-close:hover{background:var(--border2);color:var(--text)}
+.ham-tabs{
+  display:flex;border-bottom:1px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;flex-shrink:0;
+}
+.ham-tabs::-webkit-scrollbar{display:none}
+.htab{
+  padding:11px 14px;font-size:12px;font-weight:600;
+  color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;
+  white-space:nowrap;transition:all .15s;flex-shrink:0;
+}
+.htab.active{color:var(--text);border-bottom-color:var(--black)}
+.ham-sec{display:none;flex:1;padding:16px;flex-direction:column;gap:14px}
+.ham-sec.active{display:flex}
+.hcard{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:14px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.hcard-title{
+  font-family:'Syne',sans-serif;
+  font-weight:700;font-size:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.hbar{width:3px;height:15px;border-radius:2px;background:var(--geo)}
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.s3{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:8px;padding:10px;text-align:center;
+}
+.s3-num{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--geo);line-height:1;margin-bottom:2px}
+.s3-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.cb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 0;cursor:pointer;
+  border-radius:6px;transition:background .15s;
+}
+.cb-item:hover{background:rgba(0,0,0,.03)}
+.cb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cb-name{font-size:13px;font-weight:500;flex:1}
+.cb-bar-wrap{flex:1;background:var(--border);border-radius:3px;height:4px;overflow:hidden}
+.cb-bar{height:100%;border-radius:3px}
+.cb-pct{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);width:22px;text-align:right}
+.lb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 0;border-bottom:1px solid var(--border);
+}
+.lb-item:last-child{border-bottom:none}
+.lb-rank{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--muted);width:22px;text-align:center;flex-shrink:0}
+.r1{color:#b45309}
+.r2{color:#6b7280}
+.r3{color:#92400e}
+.lb-av{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.lb-name{flex:1;font-size:13px;font-weight:500}
+.lb-pts{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.you .lb-name{color:var(--geo);font-weight:700}
+.you .lb-pts{color:var(--geo)}
+.you-chip{
+  font-family:'DM Mono',monospace;font-size:8px;
+  background:var(--geo-light);border:1px solid #bfdbfe;
+  color:var(--geo);padding:1px 5px;border-radius:3px;font-weight:500;
+}
+.pb-row{display:flex;gap:6px}
+.pb-btn{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  padding:5px 12px;border-radius:6px;
+  background:var(--white);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .15s;
+}
+.pb-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
+.setting-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 0;border-bottom:1px solid var(--border);
+}
+.setting-row:last-child{border-bottom:none}
+.setting-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.setting-desc{font-size:11px;color:var(--muted)}
+.toggle{
+  width:42px;height:23px;background:var(--border);
+  border-radius:12px;cursor:pointer;position:relative;
+  transition:background .25s;flex-shrink:0;
+}
+.toggle.on{background:var(--black)}
+.toggle-knob{
+  width:17px;height:17px;background:#fff;border-radius:50%;
+  position:absolute;top:3px;left:3px;
+  transition:left .25s;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+}
+.toggle.on .toggle-knob{left:22px}
+.sel-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.sel-opt{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  padding:4px 12px;border-radius:5px;
+  background:var(--white);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .15s;
+}
+.sel-opt.active{background:var(--black);color:#fff;border-color:var(--black)}
+.reading-btn{
+  width:100%;background:var(--black);border:none;
+  border-radius:8px;padding:12px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
+  color:#fff;cursor:pointer;transition:opacity .15s;
+}
+.reading-btn:hover{opacity:.85}
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:4px}
+.dg-cell{aspect-ratio:1;border-radius:3px;cursor:pointer;transition:opacity .15s;border:1px solid transparent}
+.dg-cell:hover{opacity:.7}
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:56px}
+.bar{flex:1;border-radius:3px 3px 0 0;cursor:pointer;transition:opacity .15s}
+.bar:hover{opacity:.75}
+
+/* ============================
+   TOAST + LIKE FLASH
+============================ */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--black);color:#fff;
+  border-radius:20px;padding:10px 20px;
+  font-size:12px;font-weight:500;
+  z-index:1000;transition:transform .3s;
+  pointer-events:none;white-space:nowrap;
+  font-family:'DM Mono',monospace;letter-spacing:.3px;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.like-flash{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;pointer-events:none;z-index:999;
+  opacity:0;transition:opacity .1s;
+}
+.like-flash.show{opacity:1}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media(max-width:900px){
+  .vgrid{grid-template-columns:repeat(2,1fr)}
+  .sidebar{display:none}
+}
+@media(max-width:600px){
+  .vgrid{grid-template-columns:1fr}
+  .vid-hl{font-size:20px;padding:0 60px}
+  .feed-inner{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="like-flash" id="likeFlash">❤️</div>
+<div id="ham-overlay" onclick="closeHam()"></div>
+
+<!-- ============================================================
+     HAMBURGER PANEL
+============================================================ -->
+<div id="ham-panel">
+  <div class="ham-hdr">
+    <div class="ham-logo">
+      <svg width="26" height="26" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#0a0a0a" stroke-width="3"/>
+        <ellipse cx="32" cy="32" rx="13" ry="30" fill="none" stroke="#0a0a0a" stroke-width="2"/>
+        <line x1="2" y1="32" x2="62" y2="32" stroke="#0a0a0a" stroke-width="2"/>
+        <path d="M5 20 Q32 25 59 20" stroke="#0a0a0a" stroke-width="1.5" fill="none"/>
+        <path d="M5 44 Q32 39 59 44" stroke="#0a0a0a" stroke-width="1.5" fill="none"/>
+        <path d="M30 4 L32 3 L35 3.5 L37 5 L37.5 8 L36 11 L36.5 14 L37.5 17 L37 21 L36 25 L35 29 L34 33 L33 36 L32 38.5 L31 37 L30 35 L29 32 L28 28 L27.5 24 L27 20 L27 16 L27.5 12 L27.5 9 L28.5 6 Z" fill="#0a0a0a" opacity="0.8"/>
+      </svg>
+      <div class="ham-logo-text">News30</div>
+    </div>
+    <div class="ham-close" onclick="closeHam()">✕</div>
+  </div>
+  <div class="ham-tabs">
+    <div class="htab active" onclick="hamTab('quiz',this)">📊 Quiz Stats</div>
+    <div class="htab" onclick="hamTab('activity',this)">📅 Activity</div>
+    <div class="htab" onclick="hamTab('lb',this)">🏆 Leaderboard</div>
+    <div class="htab" onclick="hamTab('ai',this)">🤖 Ask AI</div>
+    <div class="htab" onclick="hamTab('settings',this)">⚙️ Settings</div>
+  </div>
+
+  <!-- QUIZ STATS -->
+  <div class="ham-sec active" id="hs-quiz">
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar"></div>Overall</div>
+      <div class="stat3">
+        <div class="s3"><div class="s3-num">183</div><div class="s3-lbl">Quizzes</div></div>
+        <div class="s3"><div class="s3-num">74%</div><div class="s3-lbl">Accuracy</div></div>
+        <div class="s3"><div class="s3-num">1,830</div><div class="s3-lbl">Points</div></div>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar"></div>By Category — click for breakdown</div>
+      <div class="cb-item" onclick="showToast('Geopolitics · 78 quizzes · 81% accuracy · 780pts')">
+        <div class="cb-dot" style="background:#1a56db"></div>
+        <div class="cb-name">Geopolitics</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:78%;background:#1a56db"></div></div>
+        <div class="cb-pct">78</div>
+      </div>
+      <div class="cb-item" onclick="showToast('Finance · 55 quizzes · 70% accuracy · 550pts')">
+        <div class="cb-dot" style="background:#15803d"></div>
+        <div class="cb-name">Finance</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:55%;background:#15803d"></div></div>
+        <div class="cb-pct">55</div>
+      </div>
+      <div class="cb-item" onclick="showToast('Sports · 50 quizzes · 65% accuracy · 500pts')">
+        <div class="cb-dot" style="background:#c2410c"></div>
+        <div class="cb-name">Sports</div>
+        <div class="cb-bar-wrap"><div class="cb-bar" style="width:50%;background:#c2410c"></div></div>
+        <div class="cb-pct">50</div>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar"></div>Daily Volume — click a bar</div>
+      <div class="bar-chart">
+        <div class="bar" style="height:45%;background:#bfdbfe" onclick="showToast('Mon · 4 quizzes')"></div>
+        <div class="bar" style="height:85%;background:#1a56db" onclick="showToast('Tue · 8 quizzes')"></div>
+        <div class="bar" style="height:55%;background:#bfdbfe" onclick="showToast('Wed · 5 quizzes')"></div>
+        <div class="bar" style="height:30%;background:#bfdbfe" onclick="showToast('Thu · 3 quizzes')"></div>
+        <div class="bar" style="height:95%;background:#1a56db" onclick="showToast('Fri · 9 quizzes')"></div>
+        <div class="bar" style="height:20%;background:#bfdbfe" onclick="showToast('Sat · 2 quizzes')"></div>
+        <div class="bar" style="height:65%;background:#bfdbfe" onclick="showToast('Sun · 6 quizzes')"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVITY -->
+  <div class="ham-sec" id="hs-activity">
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar" style="background:#dc2626"></div>Login Streak</div>
+      <div class="stat3">
+        <div class="s3"><div class="s3-num" style="color:#dc2626">47</div><div class="s3-lbl">Streak</div></div>
+        <div class="s3"><div class="s3-num">124</div><div class="s3-lbl">Total Days</div></div>
+        <div class="s3"><div class="s3-num">Mon</div><div class="s3-lbl">Best Day</div></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">Last 28 days — tap a day</div>
+      <div class="day-grid" id="actGrid"></div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="ham-sec" id="hs-lb">
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar" style="background:#b45309"></div>Leaderboard</div>
+      <div class="pb-row">
+        <div class="pb-btn active" onclick="lbP(this)">This Week</div>
+        <div class="pb-btn" onclick="lbP(this)">Month</div>
+        <div class="pb-btn" onclick="lbP(this)">All Time</div>
+      </div>
+      <div>
+        <div class="lb-item"><div class="lb-rank r1">🥇</div><div class="lb-av" style="background:linear-gradient(135deg,#f59e0b,#d97706)">A</div><div class="lb-name">alex_reads</div><div class="lb-pts">4,820</div></div>
+        <div class="lb-item"><div class="lb-rank r2">🥈</div><div class="lb-av" style="background:#9ca3af">M</div><div class="lb-name">maya_news</div><div class="lb-pts">3,940</div></div>
+        <div class="lb-item"><div class="lb-rank r3">🥉</div><div class="lb-av" style="background:#b45309">S</div><div class="lb-name">sam_world</div><div class="lb-pts">3,000</div></div>
+        <div class="lb-item you"><div class="lb-rank" style="color:var(--geo)">04</div><div class="lb-av" style="background:var(--geo)">J</div><div class="lb-name">jordan_k <span class="you-chip">YOU</span></div><div class="lb-pts">2,340</div></div>
+        <div class="lb-item"><div class="lb-rank">05</div><div class="lb-av" style="background:#6b7280">R</div><div class="lb-name">r_daily</div><div class="lb-pts">2,100</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASK AI -->
+  <div class="ham-sec" id="hs-ai" style="padding:0;gap:0">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted)">Ask anything about world events, history or context.</div>
+    <div class="ai-msgs" id="gMsgs" style="min-height:160px"></div>
+    <div class="qq-row">
+      <div class="qq" onclick="gAsk(this)">Biggest story today?</div>
+      <div class="qq" onclick="gAsk(this)">Explain Russia-Ukraine</div>
+      <div class="qq" onclick="gAsk(this)">Latest in AI?</div>
+      <div class="qq" onclick="gAsk(this)">What's happening with inflation?</div>
+    </div>
+    <div class="ai-inp-row">
+      <input class="ai-inp" id="gInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')gSend()">
+      <div class="send-btn" onclick="gSend()">➤</div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="ham-sec" id="hs-settings">
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar"></div>Appearance</div>
+      <div class="setting-row">
+        <div><div class="setting-name">Dark Mode</div><div class="setting-desc">Switch to dark theme</div></div>
+        <div class="toggle" onclick="tog(this)"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-name">Compact View</div><div class="setting-desc">More stories per row</div></div>
+        <div class="toggle" onclick="tog(this)"><div class="toggle-knob"></div></div>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar" style="background:#dc2626"></div>Notifications</div>
+      <div class="setting-row">
+        <div><div class="setting-name">Breaking News</div><div class="setting-desc">Instant push alerts</div></div>
+        <div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-name">Daily Digest</div><div class="setting-desc">Morning briefing 8am</div></div>
+        <div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-name">Quiz Reminders</div><div class="setting-desc">Daily nudge if you haven't played</div></div>
+        <div class="toggle" onclick="tog(this)"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-name">Streak Alerts</div><div class="setting-desc">Warning before streak breaks</div></div>
+        <div class="toggle on" onclick="tog(this)"><div class="toggle-knob"></div></div>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar" style="background:var(--fin)"></div>Content</div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div><div class="setting-name">Summary Length</div><div class="setting-desc">How detailed AI summaries are</div></div>
+        <div class="sel-row">
+          <div class="sel-opt active" onclick="selO(this)">Brief</div>
+          <div class="sel-opt" onclick="selO(this)">Standard</div>
+          <div class="sel-opt" onclick="selO(this)">Detailed</div>
+        </div>
+      </div>
+    </div>
+    <div class="hcard">
+      <div class="hcard-title"><div class="hbar" style="background:var(--sport)"></div>📖 Reading Assessment</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:12px">Take a voluntary reading test. AI calibrates all summaries to your reading level and gradually increases complexity as you improve over time.</div>
+      <button class="reading-btn" onclick="showToast('Reading assessment coming soon!')">Take Reading Assessment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 1: HOME
+============================================================ -->
+<div class="screen active" id="home">
+
+  <!-- BREAKING TICKER -->
+  <div class="topbar">
+    <div class="ticker-wrap">
+      <div class="ticker-label">⚡ Breaking</div>
+      <div class="ticker-track">
+        <span>UN Security Council calls emergency session over South China Sea escalation</span>
+        <span>Federal Reserve holds rates steady — signals two cuts later this year</span>
+        <span>Arsenal go top of Premier League after late winner vs Man City</span>
+        <span>Bitcoin crosses $95,000 as institutional buying returns</span>
+        <span>NATO launches joint exercises after Russian aircraft enter Finnish airspace</span>
+        <span>UN Security Council calls emergency session over South China Sea escalation</span>
+        <span>Federal Reserve holds rates steady — signals two cuts later this year</span>
+        <span>Arsenal go top of Premier League after late winner vs Man City</span>
+        <span>Bitcoin crosses $95,000 as institutional buying returns</span>
+        <span>NATO launches joint exercises after Russian aircraft enter Finnish airspace</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="logo" onclick="goTo('home')">
+      <svg class="logo-globe" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#0a0a0a" stroke-width="2.5"/>
+        <ellipse cx="32" cy="32" rx="13" ry="30" fill="none" stroke="#0a0a0a" stroke-width="1.8"/>
+        <line x1="2" y1="32" x2="62" y2="32" stroke="#0a0a0a" stroke-width="1.8"/>
+        <path d="M5 20 Q32 25 59 20" stroke="#0a0a0a" stroke-width="1.4" fill="none"/>
+        <path d="M5 44 Q32 39 59 44" stroke="#0a0a0a" stroke-width="1.4" fill="none"/>
+        <path d="M30 4 L32 3 L35 3.5 L37 5 L37.5 8 L36 11 L36.5 14 L37.5 17 L37 21 L36 25 L35 29 L34 33 L33 36 L32 38.5 L31 37 L30 35 L29 32 L28 28 L27.5 24 L27 20 L27 16 L27.5 12 L27.5 9 L28.5 6 Z" fill="#0a0a0a" opacity="0.85"/>
+        <path d="M38.5 22 L40 21 L41.5 22.5 L41 25 L39.5 25.5 L38.5 24 Z" fill="#0a0a0a" opacity="0.6"/>
+        <path d="M24 16 L23 15 L22.5 17 L23.5 18.5 L25 18.5 L25.5 17 Z" fill="#0a0a0a" opacity="0.6"/>
+      </svg>
+      <div class="logo-text">News30</div>
+    </div>
+
+    <div class="nav-search">
+      <span class="nav-search-icon">⌕</span>
+      <input type="text" placeholder="Ask AI anything — what's happening in Gaza?">
+      <span class="ai-chip">AI</span>
+    </div>
+
+    <div class="nav-actions">
+      <div class="nav-btn" onclick="showToast('Notifications')">🔔</div>
+      <div class="nav-btn" onclick="showToast('Saved Stories')">🔖</div>
+      <div class="nav-btn ham-btn" onclick="openHam()">☰</div>
+      <div class="nav-avatar" onclick="showToast('Sign in to view your profile')">J</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-item active"><span class="sb-icon">🏠</span>Home</div>
+      <div class="sb-item" onclick="showToast('Trending stories')"><span class="sb-icon">🔥</span>Trending</div>
+      <div class="sb-divider"></div>
+      <div class="sb-group-label">You</div>
+      <div class="sb-item" onclick="showToast('Your saved stories')"><span class="sb-icon">🔖</span>Saved Stories</div>
+      <div class="sb-item" onclick="showToast('Ask AI — your personal news assistant')"><span class="sb-icon">🤖</span>Ask AI</div>
+      <div class="sb-item" onclick="showToast('Paste any article to simplify it')"><span class="sb-icon">📖</span>Simplify Article</div>
+      <div class="sb-divider"></div>
+      <div class="sb-group-label">Categories</div>
+      <div class="sb-item" onclick="showToast('Geopolitics')"><span class="sb-icon">🌍</span>Geopolitics</div>
+      <div class="sb-item" onclick="showToast('Finance & Stocks')"><span class="sb-icon">📈</span>Finance</div>
+      <div class="sb-item" onclick="showToast('Sports')"><span class="sb-icon">⚽</span>Sports</div>
+      <div class="sb-divider"></div>
+      <div class="sb-item" onclick="showToast('Sign in to see your points and streak')"><span class="sb-icon">⚡</span>Your Points</div>
+      <div class="sb-item" onclick="showToast('Your reading streak')"><span class="sb-icon">🔥</span>Streak: 47 days</div>
+    </div>
+
+    <!-- FEED -->
+    <div class="feed-col">
+      <!-- CAT TABS -->
+      <div class="cat-strip">
+        <div class="ctab active" onclick="setTab(this)">All</div>
+        <div class="ctab" onclick="setTab(this)">🌍 Geopolitics</div>
+        <div class="ctab" onclick="setTab(this)">📈 Finance</div>
+        <div class="ctab" onclick="setTab(this)">⚽ Sports</div>
+        <div class="ctab-lock">🔒 Tech <span class="pro-tag">PRO</span></div>
+        <div class="ctab-lock">🔒 Science <span class="pro-tag">PRO</span></div>
+        <div class="ctab-lock">🔒 Local <span class="pro-tag">PRO</span></div>
+        <div class="ctab-lock">🔒 Culture <span class="pro-tag">PRO</span></div>
+      </div>
+
+      <div class="feed-inner">
+
+        <!-- GEOPOLITICS -->
+        <div class="sec-head">
+          <div class="sec-title"><div class="sec-bar" style="background:var(--geo)"></div>Geopolitics</div>
+          <div class="sec-see">See all →</div>
+        </div>
+        <div class="vgrid">
+          <div class="vcard" onclick="goToVid('geo',1)">
+            <div class="vthumb vt-geo"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">1</div></div><div class="vt-play">▶</div><div class="vt-dur">0:28</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-geo">Geo</span><span class="tag tag-c">Centre</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">NATO Allies Launch Joint Military Exercises After Russian Aircraft Enter Finnish Airspace</div>
+              <div class="vcard-foot"><span class="vcard-src">Reuters <a href="#" onclick="showToast('Source: Reuters');return false">↗</a></span><span class="vcard-time">14m ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('geo',2)">
+            <div class="vthumb vt-geo"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">2</div></div><div class="vt-play">▶</div><div class="vt-dur">0:30</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-geo">Geo</span><span class="tag tag-l">Left</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">Israel-Gaza Ceasefire Talks Resume in Cairo With New US Proposal on the Table</div>
+              <div class="vcard-foot"><span class="vcard-src">Al Jazeera <a href="#" onclick="showToast('Source: Al Jazeera');return false">↗</a></span><span class="vcard-time">32m ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('geo',3)">
+            <div class="vthumb vt-geo"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">3</div></div><div class="vt-play">▶</div><div class="vt-dur">0:27</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-geo">Geo</span><span class="tag tag-c">Centre</span><span class="tag tag-d">⚠ Disputed</span></div>
+              <div class="vcard-title">Trump Signs Executive Order Imposing New Tariffs on EU Steel and Aluminium Imports</div>
+              <div class="vcard-foot"><span class="vcard-src">AP News <a href="#" onclick="showToast('Source: AP News');return false">↗</a></span><span class="vcard-time">1hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('geo',4)">
+            <div class="vthumb vt-geo"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">4</div></div><div class="vt-play">▶</div><div class="vt-dur">0:29</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-geo">Geo</span><span class="tag tag-r">Right</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">China's Military Drills Around Taiwan Intensify Amid Rising Diplomatic Tensions</div>
+              <div class="vcard-foot"><span class="vcard-src">Reuters <a href="#" onclick="showToast('Source: Reuters');return false">↗</a></span><span class="vcard-time">2hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FINANCE -->
+        <div class="sec-head">
+          <div class="sec-title"><div class="sec-bar" style="background:var(--fin)"></div>Finance & Stocks</div>
+          <div class="sec-see">See all →</div>
+        </div>
+        <div class="vgrid">
+          <div class="vcard" onclick="goToVid('fin',1)">
+            <div class="vthumb vt-fin"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">1</div></div><div class="vt-play">▶</div><div class="vt-dur">0:30</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-fin">Finance</span><span class="tag tag-c">Centre</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">Federal Reserve Holds Interest Rates Steady, Signals Two Cuts Later This Year</div>
+              <div class="vcard-foot"><span class="vcard-src">Bloomberg <a href="#" onclick="showToast('Source: Bloomberg');return false">↗</a></span><span class="vcard-time">45m ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('fin',2)">
+            <div class="vthumb vt-fin"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">2</div></div><div class="vt-play">▶</div><div class="vt-dur">0:28</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-fin">Finance</span><span class="tag tag-c">Centre</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">NVIDIA Hits $4 Trillion Market Cap as AI Chip Demand Continues to Surge Globally</div>
+              <div class="vcard-foot"><span class="vcard-src">FT <a href="#" onclick="showToast('Source: Financial Times');return false">↗</a></span><span class="vcard-time">3hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('fin',3)">
+            <div class="vthumb vt-fin"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">3</div></div><div class="vt-play">▶</div><div class="vt-dur">0:26</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-fin">Finance</span><span class="tag tag-c">Centre</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">Bitcoin Crosses $95,000 Again as Institutional Buying Returns to Crypto Markets</div>
+              <div class="vcard-foot"><span class="vcard-src">CoinDesk <a href="#" onclick="showToast('Source: CoinDesk');return false">↗</a></span><span class="vcard-time">4hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('fin',4)">
+            <div class="vthumb vt-fin"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">4</div></div><div class="vt-play">▶</div><div class="vt-dur">0:29</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-fin">Finance</span><span class="tag tag-c">Centre</span><span class="tag tag-v">✓ Verified</span></div>
+              <div class="vcard-title">UK Inflation Falls to 2.8% as Energy Prices Drop and Bank of England Eyes Rate Cut</div>
+              <div class="vcard-foot"><span class="vcard-src">BBC News <a href="#" onclick="showToast('Source: BBC News');return false">↗</a></span><span class="vcard-time">5hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPORTS -->
+        <div class="sec-head">
+          <div class="sec-title"><div class="sec-bar" style="background:var(--sport)"></div>Sports</div>
+          <div class="sec-see">See all →</div>
+        </div>
+        <div class="vgrid" style="margin-bottom:40px">
+          <div class="vcard" onclick="goToVid('sport',1)">
+            <div class="vthumb vt-sport"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">1</div></div><div class="vt-play">▶</div><div class="vt-dur">0:30</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-sport">Sports</span></div>
+              <div class="vcard-title">Arsenal Go Top of the Premier League After Dramatic Late Winner Against Man City</div>
+              <div class="vcard-foot"><span class="vcard-src">Sky Sports <a href="#" onclick="showToast('Source: Sky Sports');return false">↗</a></span><span class="vcard-time">1hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('sport',2)">
+            <div class="vthumb vt-sport"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">2</div></div><div class="vt-play">▶</div><div class="vt-dur">0:28</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-sport">Sports</span></div>
+              <div class="vcard-title">LeBron James Announces This Season Will Be His Last in the NBA After 22 Years</div>
+              <div class="vcard-foot"><span class="vcard-src">ESPN <a href="#" onclick="showToast('Source: ESPN');return false">↗</a></span><span class="vcard-time">2hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('sport',3)">
+            <div class="vthumb vt-sport"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">3</div></div><div class="vt-play">▶</div><div class="vt-dur">0:29</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-sport">Sports</span></div>
+              <div class="vcard-title">Verstappen Takes Pole Position in Melbourne Ahead of Australian Grand Prix</div>
+              <div class="vcard-foot"><span class="vcard-src">BBC Sport <a href="#" onclick="showToast('Source: BBC Sport');return false">↗</a></span><span class="vcard-time">3hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+          <div class="vcard" onclick="goToVid('sport',4)">
+            <div class="vthumb vt-sport"><div class="vt-inner"><div class="vt-ai">AI Video</div><div class="vt-num">4</div></div><div class="vt-play">▶</div><div class="vt-dur">0:27</div></div>
+            <div class="vcard-body">
+              <div class="vcard-tags"><span class="tag tag-sport">Sports</span></div>
+              <div class="vcard-title">Novak Djokovic Withdraws From Miami Open Citing Knee Injury Ahead of Clay Season</div>
+              <div class="vcard-foot"><span class="vcard-src">Tennis.com <a href="#" onclick="showToast('Source: Tennis.com');return false">↗</a></span><span class="vcard-time">4hr ago</span></div>
+              <div class="quiz-btn" onclick="event.stopPropagation();goToInter('quiz')">⚡ Quiz +10pts</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 2: VIDEO
+============================================================ -->
+<div class="screen" id="vidscreen">
+  <div class="vid-nav">
+    <div class="vid-back" onclick="goBack()">←</div>
+    <div class="vid-logo">
+      <svg width="22" height="22" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#fff" stroke-width="3"/>
+        <ellipse cx="32" cy="32" rx="13" ry="30" fill="none" stroke="#fff" stroke-width="2"/>
+        <line x1="2" y1="32" x2="62" y2="32" stroke="#fff" stroke-width="2"/>
+        <path d="M5 20 Q32 25 59 20" stroke="#fff" stroke-width="1.5" fill="none"/>
+        <path d="M5 44 Q32 39 59 44" stroke="#fff" stroke-width="1.5" fill="none"/>
+        <path d="M30 4 L32 3 L35 3.5 L37 5 L37.5 8 L36 11 L36.5 14 L37.5 17 L37 21 L36 25 L35 29 L34 33 L33 36 L32 38.5 L31 37 L30 35 L29 32 L28 28 L27.5 24 L27 20 L27 16 L27.5 12 L27.5 9 L28.5 6 Z" fill="#fff" opacity="0.7"/>
+      </svg>
+      <div class="vid-logo-text">News30</div>
+    </div>
+  </div>
+  <div class="vid-body">
+    <div class="vid-player" id="vidPlayer">
+      <div id="vidBg" style="position:absolute;inset:0" class="vid-geo-bg"></div>
+      <div class="vid-emoji" id="vidEmoji">🌍</div>
+      <div class="vid-cat-tag" id="vidCat">GEOPOLITICS</div>
+      <div class="vid-hl" id="vidHl">NATO Allies Launch Joint Military Exercises After Russian Aircraft Enter Finnish Airspace</div>
+      <div class="vid-src-pill" id="vidSrc" onclick="showToast('Opening source...')">Reuters · BBC News · 14 min ago · View Source ↗</div>
+      <div class="vid-progress">
+        <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+        <div class="vid-ctrls">
+          <span class="vctrl">⏮</span>
+          <span class="vctrl" style="font-size:22px">⏸</span>
+          <span class="vctrl">⏭</span>
+          <span class="vctrl-time">0:11 / 0:28</span>
+        </div>
+      </div>
+    </div>
+    <div class="vid-side">
+      <div class="va" id="likeBtn" onclick="toggleLike()">
+        <div class="va-icon" id="likeIco">🤍</div>
+        <div class="va-lbl" id="likeCnt">2.4K</div>
+      </div>
+      <div class="va" onclick="goToInter('summary')">
+        <div class="va-icon">📋</div>
+        <div class="va-lbl">Summary</div>
+      </div>
+      <div class="va" onclick="goToInter('ai')">
+        <div class="va-icon">🤖</div>
+        <div class="va-lbl">Ask AI</div>
+      </div>
+      <div class="va" onclick="goToInter('quiz')">
+        <div class="va-icon">⚡</div>
+        <div class="va-lbl">Quiz</div>
+      </div>
+      <div class="va" onclick="showToast('Link copied!')">
+        <div class="va-icon">🔗</div>
+        <div class="va-lbl">Share</div>
+      </div>
+    </div>
+  </div>
+  <div class="vid-btabs">
+    <div class="vbtab active" onclick="goToInter('summary')"><div class="vbtab-icon">📋</div><div class="vbtab-lbl">Summary</div></div>
+    <div class="vbtab" onclick="goToInter('ai')"><div class="vbtab-icon">🤖</div><div class="vbtab-lbl">Ask AI</div></div>
+    <div class="vbtab" onclick="goToInter('quiz')"><div class="vbtab-icon">⚡</div><div class="vbtab-lbl">Quiz</div></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 3: INTERACTIVE
+============================================================ -->
+<div class="screen" id="interscreen">
+  <div class="inter-nav">
+    <div class="inter-thumb vt-geo" id="iThumb">🌍</div>
+    <div class="inter-info">
+      <div class="inter-title" id="iTitle">NATO Allies Launch Joint Military Exercises</div>
+      <div class="inter-meta" id="iMeta">Geopolitics · Reuters · 14 min ago</div>
+    </div>
+    <div class="close-x" onclick="goBack()">✕</div>
+  </div>
+  <div class="itabs">
+    <div class="itab active" id="it-summary" onclick="switchTab('summary')">📋 Summary</div>
+    <div class="itab" id="it-ai" onclick="switchTab('ai')">🤖 Ask AI</div>
+    <div class="itab" id="it-quiz" onclick="switchTab('quiz')">⚡ Quiz</div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="panel active sum-body" id="p-summary">
+    <div class="sum-hl" id="sHl">NATO Allies Launch Joint Military Exercises After Russian Aircraft Enter Finnish Airspace</div>
+    <div class="sum-tags">
+      <span class="tag tag-geo" id="sCat">Geopolitics</span>
+      <span class="tag tag-c">Centre</span>
+      <span class="tag tag-v">✓ Verified</span>
+      <span class="tag" style="background:var(--light);color:var(--muted);border:1px solid var(--border)">Reuters</span>
+      <span class="tag" style="background:var(--light);color:var(--muted);border:1px solid var(--border)">BBC News</span>
+    </div>
+    <div class="sum-text">NATO member states have announced coordinated military drills across three Baltic nations following an incident in which Russian aircraft entered Finnish airspace without authorisation. The move is widely seen as a direct response to what Western officials are calling a sustained pattern of deliberate provocation from Moscow.</div>
+    <div class="kp-box">
+      <div class="kp-hdr">Key Points</div>
+      <div class="kp"><div class="kp-dot"></div>Russian aircraft crossed into Finnish airspace triggering NATO response protocols</div>
+      <div class="kp"><div class="kp-dot"></div>Joint military exercises announced across Estonia, Latvia and Lithuania</div>
+      <div class="kp"><div class="kp-dot"></div>Defence ministers convening in Brussels for emergency talks today</div>
+      <div class="kp"><div class="kp-dot"></div>Russia has not publicly responded to the allegations as of publishing</div>
+    </div>
+    <div class="sec-lbl">Sources</div>
+    <div class="src-row">
+      <div class="src-card" onclick="showToast('Opening Reuters...')"><div class="src-ico">📰</div><div><div class="src-name">Reuters</div><div class="src-bias">Centre</div></div></div>
+      <div class="src-card" onclick="showToast('Opening BBC News...')"><div class="src-ico">📺</div><div><div class="src-name">BBC News</div><div class="src-bias">Centre-Left</div></div></div>
+      <div class="src-card" onclick="showToast('Opening AP News...')"><div class="src-ico">🌐</div><div><div class="src-name">AP News</div><div class="src-bias">Centre</div></div></div>
+    </div>
+  </div>
+
+  <!-- AI -->
+  <div class="panel ai-body" id="p-ai">
+    <div class="ai-msgs" id="aiMsgs">
+      <div class="msg msg-ai"><div class="msg-av">N</div><div class="bubble">Ask me anything about this story — background, context, analysis or follow-up questions. 🌍</div></div>
+      <div class="msg msg-user"><div class="msg-av">J</div><div class="bubble">Why does Russia keep doing this?</div></div>
+      <div class="msg msg-ai"><div class="msg-av">N</div><div class="bubble">Russia uses airspace violations as a deliberate signalling tool — testing NATO's response times without technically starting a conflict. Finland only joined NATO in 2023, so Russia is probing how the alliance defends its newest members. Provocative but calculated.</div></div>
+    </div>
+    <div class="qq-row">
+      <div class="qq" onclick="askQ(this)">What could NATO do next?</div>
+      <div class="qq" onclick="askQ(this)">How serious is this?</div>
+      <div class="qq" onclick="askQ(this)">When did Finland join NATO?</div>
+      <div class="qq" onclick="askQ(this)">What does Russia gain?</div>
+    </div>
+    <div class="ai-inp-row">
+      <input class="ai-inp" id="aiInp" placeholder="Ask anything about this story..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <div class="send-btn" onclick="sendMsg()">➤</div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="panel quiz-body" id="p-quiz">
+    <div class="quiz-hdr">
+      <div class="quiz-ttl">News Quiz</div>
+      <div class="quiz-sub">3 questions · earn up to 30 points</div>
+    </div>
+    <div class="q-prog"><div class="qd cur" id="qd0"></div><div class="qd" id="qd1"></div><div class="qd" id="qd2"></div></div>
+    <div class="pts-badge">⚡ Earn up to 30 points</div>
+    <div class="q-card"><div class="q-num" id="qNum">Question 1 of 3</div><div class="q-text" id="qText">What triggered NATO's decision to launch joint military exercises?</div></div>
+    <div class="opts" id="opts"></div>
+    <div class="score-card" id="scoreCard">
+      <div style="font-size:48px">🏆</div>
+      <div class="score-big" id="scoreBig">3/3</div>
+      <div class="score-sub">Questions correct</div>
+      <div class="score-pts" id="scorePts">+30 points added to your profile</div>
+      <button class="retry-btn" onclick="resetQuiz()">Try Another Story</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+// STATE
+let cur='home',liked=false,likeN=2400,curQ=0,score=0,answered=false;
+
+const stories={
+  geo:{emoji:'🌍',bg:'vid-geo-bg',cat:'GEOPOLITICS',hl:'NATO Allies Launch Joint Military Exercises After Russian Aircraft Enter Finnish Airspace',src:'Reuters · BBC News · 14 min ago',thumb:'vt-geo',meta:'Geopolitics · Reuters · 14 min ago',title:'NATO Allies Launch Joint Military Exercises'},
+  fin:{emoji:'📈',bg:'vid-fin-bg',cat:'FINANCE',hl:'Federal Reserve Holds Interest Rates Steady, Signals Two Cuts Later This Year',src:'Bloomberg · Reuters · 45 min ago',thumb:'vt-fin',meta:'Finance · Bloomberg · 45 min ago',title:'Fed Holds Rates, Signals Two Cuts'},
+  sport:{emoji:'⚽',bg:'vid-sport-bg',cat:'SPORTS',hl:'Arsenal Go Top of the Premier League After Dramatic Late Winner Against Manchester City',src:'Sky Sports · BBC Sport · 1hr ago',thumb:'vt-sport',meta:'Sports · Sky Sports · 1hr ago',title:'Arsenal Go Top of Premier League'}
+};
+
+const qs=[
+  {q:"What triggered NATO's decision to launch joint military exercises?",opts:["A NATO summit in Brussels","Russian aircraft entering Finnish airspace","A cyberattack on Estonian infrastructure","Russia withdrawing from a peace treaty"],c:1},
+  {q:"Which countries are hosting the NATO military drills?",opts:["Poland, Romania, Bulgaria","Estonia, Latvia, Lithuania","Norway, Sweden, Denmark","Germany, France, UK"],c:1},
+  {q:"Where are NATO defence ministers meeting?",opts:["London","Warsaw","Brussels","Washington"],c:2}
+];
+
+const aiReplies={
+  "What could NATO do next?":"NATO's options range from increasing permanent military presence in Baltic states to calling an emergency Article 4 consultation. A full Article 5 collective defence response is very unlikely for an airspace violation.",
+  "How serious is this?":"On its own, a 6/10. The concern is the pattern — this is the third incident in two months, suggesting deliberate testing rather than accidents.",
+  "When did Finland join NATO?":"Finland officially joined NATO on 4 April 2023, ending decades of military non-alignment. Sweden followed in March 2024.",
+  "What does Russia gain?":"Intelligence on NATO response times and a message that it won't be deterred by the alliance's expansion eastward. Low cost, high informational value.",
+  "Biggest story today?":"The biggest story right now is the UN Security Council emergency session over South China Sea escalation, alongside NATO responding to Russian aircraft entering Finnish airspace.",
+  "Explain Russia-Ukraine":"Russia invaded Ukraine in February 2022 citing NATO expansion concerns. The war has caused massive casualties, displacement and a global energy crisis.",
+  "Latest in AI?":"NVIDIA just hit a $4 trillion market cap driven by AI chip demand. Major AI labs continue racing toward more capable models.",
+  "What's happening with inflation?":"Inflation has been gradually cooling in most Western economies. The Fed and Bank of England are now signalling rate cuts as inflation approaches their 2% targets."
+};
+
+// NAVIGATION
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  cur=id;
+  window.scrollTo(0,0);
+}
+
+function goToVid(cat,num){
+  const d=stories[cat];
+  document.getElementById('vidBg').className='';
+  document.getElementById('vidBg').style.cssText='position:absolute;inset:0';
+  document.getElementById('vidBg').classList.add(d.bg);
+  document.getElementById('vidEmoji').textContent=d.emoji;
+  document.getElementById('vidCat').textContent=d.cat;
+  document.getElementById('vidHl').textContent=d.hl;
+  document.getElementById('vidSrc').textContent=d.src+' · View Source ↗';
+  document.getElementById('iThumb').className='inter-thumb '+d.thumb;
+  document.getElementById('iThumb').textContent=d.emoji;
+  document.getElementById('iTitle').textContent=d.title;
+  document.getElementById('iMeta').textContent=d.meta;
+  document.getElementById('sHl').textContent=d.hl;
+  document.getElementById('sCat').textContent=d.cat.charAt(0)+d.cat.slice(1).toLowerCase();
+  liked=false;
+  document.getElementById('likeIco').textContent='🤍';
+  document.getElementById('likeCnt').textContent='2.4K';
+  document.getElementById('likeBtn').classList.remove('liked');
+  const pf=document.getElementById('progFill');
+  pf.style.animation='none';
+  setTimeout(()=>pf.style.animation='',10);
+  goTo('vidscreen');
+}
+
+function goToInter(tab){
+  goTo('interscreen');
+  switchTab(tab);
+}
+
+function goBack(){
+  if(cur==='interscreen') goTo('vidscreen');
+  else goTo('home');
+}
+
+// TABS
+function setTab(el){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('it-'+tab).classList.add('active');
+  document.getElementById('p-'+tab).classList.add('active');
+}
+
+// LIKE
+function toggleLike(){
+  liked=!liked;
+  if(liked){
+    document.getElementById('likeIco').textContent='❤️';
+    likeN++;
+    document.getElementById('likeBtn').classList.add('liked');
+    const f=document.getElementById('likeFlash');
+    f.classList.add('show');
+    setTimeout(()=>f.classList.remove('show'),500);
+  } else {
+    document.getElementById('likeIco').textContent='🤍';
+    likeN--;
+    document.getElementById('likeBtn').classList.remove('liked');
+  }
+  document.getElementById('likeCnt').textContent=likeN>=1000?(likeN/1000).toFixed(1)+'K':likeN;
+}
+
+// AI
+function askQ(el){
+  const q=el.textContent;
+  addUser(q,'aiMsgs');
+  el.style.opacity='.4';el.style.pointerEvents='none';
+  setTimeout(()=>addAI(aiReplies[q]||'Great question. Based on current reporting this is still developing.','aiMsgs'),900);
+}
+
+function sendMsg(){
+  const inp=document.getElementById('aiInp');
+  const v=inp.value.trim();
+  if(!v)return;
+  addUser(v,'aiMsgs');inp.value='';
+  setTimeout(()=>addAI('Based on the latest reporting, this is an evolving situation. Want me to pull more background context on this story?','aiMsgs'),1000);
+}
+
+function gAsk(el){
+  const q=el.textContent;
+  addUser(q,'gMsgs');
+  el.style.opacity='.4';el.style.pointerEvents='none';
+  setTimeout(()=>addAI(aiReplies[q]||'Great question. Let me break that down for you...','gMsgs'),900);
+}
+
+function gSend(){
+  const inp=document.getElementById('gInp');
+  const v=inp.value.trim();
+  if(!v)return;
+  addUser(v,'gMsgs');inp.value='';
+  setTimeout(()=>addAI('Based on the latest available information I can help break that down for you.','gMsgs'),1000);
+}
+
+function addUser(text,cId){
+  const c=document.getElementById(cId);
+  const d=document.createElement('div');
+  d.className='msg msg-user';
+  d.innerHTML=`<div class="msg-av">J</div><div class="bubble">${text}</div>`;
+  c.appendChild(d);
+  const t=document.createElement('div');
+  t.className='msg msg-ai';t.id='typ_'+Date.now();
+  t.innerHTML=`<div class="msg-av">N</div><div class="bubble"><div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>`;
+  c.appendChild(t);c.scrollTop=c.scrollHeight;
+}
+
+function addAI(text,cId){
+  const c=document.getElementById(cId);
+  const t=c.querySelector('[id^="typ_"]');if(t)t.remove();
+  const d=document.createElement('div');
+  d.className='msg msg-ai';
+  d.innerHTML=`<div class="msg-av">N</div><div class="bubble">${text}</div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+
+// QUIZ
+function loadQ(i){
+  answered=false;
+  const q=qs[i];
+  document.getElementById('qNum').textContent=`Question ${i+1} of ${qs.length}`;
+  document.getElementById('qText').textContent=q.q;
+  const letters=['A','B','C','D'];
+  const opts=document.getElementById('opts');opts.innerHTML='';
+  q.opts.forEach((o,idx)=>{
+    const d=document.createElement('div');d.className='opt';
+    d.innerHTML=`<div class="opt-ltr">${letters[idx]}</div>${o}`;
+    d.onclick=()=>answerQ(d,idx===q.c,i,q.c);
+    opts.appendChild(d);
+  });
+  document.querySelectorAll('[id^="qd"]').forEach((dot,di)=>{
+    dot.className='qd'+(di<i?' done':di===i?' cur':'');
+  });
+}
+
+function answerQ(el,correct,qi,ci){
+  if(answered)return;answered=true;
+  document.querySelectorAll('.opt').forEach(o=>o.onclick=null);
+  if(correct){el.classList.add('correct');score++;}
+  else{el.classList.add('wrong');document.querySelectorAll('.opt')[ci].classList.add('correct');}
+  showToast(correct?'✓ Correct! +10 points':'✗ Not quite — read the summary');
+  setTimeout(()=>{curQ++;if(curQ<qs.length)loadQ(curQ);else showScore();},1300);
+}
+
+function showScore(){
+  document.getElementById('p-quiz').querySelectorAll('.q-card,.opts,.q-prog,.pts-badge,.quiz-hdr').forEach(e=>e.style.display='none');
+  const sc=document.getElementById('scoreCard');sc.style.display='flex';
+  document.getElementById('scoreBig').textContent=`${score}/${qs.length}`;
+  document.getElementById('scorePts').textContent=`+${score*10} points added to your profile`;
+}
+
+function resetQuiz(){
+  curQ=0;score=0;
+  document.getElementById('p-quiz').querySelectorAll('.q-card,.opts,.q-prog,.pts-badge,.quiz-hdr').forEach(e=>e.style.display='');
+  document.getElementById('scoreCard').style.display='none';
+  loadQ(0);
+}
+
+// HAMBURGER
+function openHam(){
+  document.getElementById('ham-panel').classList.add('open');
+  document.getElementById('ham-overlay').classList.add('open');
+}
+function closeHam(){
+  document.getElementById('ham-panel').classList.remove('open');
+  document.getElementById('ham-overlay').classList.remove('open');
+}
+function hamTab(id,el){
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.ham-sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('hs-'+id).classList.add('active');
+}
+
+// SETTINGS
+function tog(el){el.classList.toggle('on')}
+function selO(el){el.closest('.sel-row').querySelectorAll('.sel-opt').forEach(o=>o.classList.remove('active'));el.classList.add('active')}
+function lbP(el){document.querySelectorAll('.pb-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');showToast('Showing: '+el.textContent)}
+
+// ACTIVITY GRID
+function buildGrid(){
+  const g=document.getElementById('actGrid');
+  const data=[0,1,2,1,3,0,2,3,1,0,2,1,3,2,1,0,3,2,1,2,0,1,3,2,1,2,3,1];
+  const dates=['Mar 1','Mar 2','Mar 3','Mar 4','Mar 5','Mar 6','Mar 7','Mar 8','Mar 9','Mar 10','Mar 11','Mar 12','Mar 13','Mar 14','Mar 15','Mar 16','Mar 17','Mar 18','Mar 19','Mar 20','Mar 21','Mar 22','Mar 23','Mar 24','Mar 25','Mar 26','Mar 27','Mar 28'];
+  const cols=['#f0ede6','#bfdbfe','#7aa8f8','#1a56db'];
+  data.forEach((v,i)=>{
+    const d=document.createElement('div');d.className='dg-cell';
+    d.style.background=cols[v];
+    d.style.border='1px solid rgba(0,0,0,.06)';
+    d.onclick=()=>showToast(dates[i]+' · '+(v===0?'No activity':v===1?'Light':v===2?'Active':'Very active'));
+    g.appendChild(d);
+  });
+}
+
+// TOAST
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// INIT
+loadQ(0);
+buildGrid();
+
+// Init global AI with welcome message
+(function(){
+  const c=document.getElementById('gMsgs');
+  const d=document.createElement('div');d.className='msg msg-ai';
+  d.innerHTML=`<div class="msg-av">N</div><div class="bubble">Hey! Ask me anything about what's happening in the world right now. 🌍</div>`;
+  c.appendChild(d);
+})();
+</script>
+</body>
+</html>
